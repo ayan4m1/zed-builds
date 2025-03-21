@@ -76,9 +76,12 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build release
-        run: cargo run --release
+        shell: cmd
+        run: |
+          cd zed
+          cargo run --release
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
           name: "${{ steps.date.outputs.dateStamp }}"
-          files: ./target/release/zed.exe
+          files: ./zed/target/release/zed.exe
