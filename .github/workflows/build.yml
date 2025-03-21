@@ -38,7 +38,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           key: win64-vcpp-tools
-          path: C:\Program Files\Microsoft Visual Studio\2022
+          path: C:\Program Files\Microsoft Visual Studio\2022\**\*
       - name: Download Visual Studio Installer
         run: Invoke-WebRequest https://aka.ms/vs/17/release/vs_community.exe -OutFile C:\vs_community.exe
       - name: Install VC++ and CMake
@@ -57,7 +57,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           key: win64-vcpp-tools
-          path: C:\Program Files\Microsoft Visual Studio\2022
+          path: C:\Program Files\Microsoft Visual Studio\2022\**\*
       - name: Cache Cargo files
         uses: actions/cache@v4
         with:
