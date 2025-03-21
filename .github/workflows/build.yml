@@ -1,0 +1,42 @@
+name: Build Zed
+
+on:
+  #schedule:
+  #  - cron: "40 0 * * *"
+  push:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - id: date
+        name: Get date stamp for release
+        run: '"$dateStamp=$(Get-Date -UFormat ''%Y-%m-%d'')" >> Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append'
+      - name: Clone repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Download Rust installer
+        run: Invoke-WebRequest https://static.rust-lang.org/dist/rust-1.85.1-x86_64-pc-windows-msvc.msi -OutFile C:\rustup.msi
+      - name: Install Rust
+        run: msiexec /i rust-1.85.1-x86_64-pc-windows-msvc.msi /qb!
+      - name: Download Visual Studio Installer
+        run: Invoke-WebRequest https://aka.ms/vs/17/release/vs_community.exe -OutFile C:\vs_community.exe
+      - name: Install VC++ and CMake
+        run: >
+          C:\vs_community.exe
+            --quiet
+            --add Microsoft.VisualStudio.Component.CoreEditor
+            --add Microsoft.VisualStudio.Workload.CoreEditor
+            --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64
+            --add Microsoft.VisualStudio.ComponentGroup.WebToolsExtensions.CMake
+            --add Microsoft.VisualStudio.Component.VC.CMake.Project
+            --add Microsoft.VisualStudio.Component.Windows11SDK.26100
+            --add Microsoft.VisualStudio.Component.VC.Runtimes.x86.x64.Spectre
+      - name: Build release
+        run: cargo run --release
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "${{ steps.date.outputs.dateStamp }}"
+          files: ./target/release/zed.exe
