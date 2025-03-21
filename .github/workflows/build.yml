@@ -19,7 +19,7 @@ jobs:
       - name: Download Rust installer
         run: Invoke-WebRequest https://static.rust-lang.org/dist/rust-1.85.1-x86_64-pc-windows-msvc.msi -OutFile C:\rustup.msi
       - name: Install Rust
-        run: msiexec /i rust-1.85.1-x86_64-pc-windows-msvc.msi /qb!
+        run: msiexec /i C:\rustup.msi /qb!
       - name: Download Visual Studio Installer
         run: Invoke-WebRequest https://aka.ms/vs/17/release/vs_community.exe -OutFile C:\vs_community.exe
       - name: Install VC++ and CMake
