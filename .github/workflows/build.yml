@@ -16,10 +16,29 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
+      - id: restore-rust
+        name: Restore cached Rust install
+        uses: actions/cache/restore@v4
+        with:
+          key: win64-rust
+          path: C:\Program Files\Rust**\*
       - name: Download Rust installer
+        if: steps.restore-rust.outputs.cache-hit != 'true'
         run: Invoke-WebRequest https://static.rust-lang.org/dist/rust-1.85.1-x86_64-pc-windows-msvc.msi -OutFile C:\rustup.msi
       - name: Install Rust
+        if: steps.restore-rust.outputs.cache-hit != 'true'
         run: Start-Process msiexec.exe -Wait -ArgumentList '/i C:\rustup.msi /qb!'
+      - name: Cache Rust install
+        if: steps.restore-rust.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          key: win64-rust
+          path: C:\Program Files\Rust**\*
+      - name: Restore cached VC++ install
+        uses: actions/cache/restore@v4
+        with:
+          key: win64-vcpp-tools
+          path: C:\Program Files\Microsoft Visual Studio\2022
       - name: Download Visual Studio Installer
         run: Invoke-WebRequest https://aka.ms/vs/17/release/vs_community.exe -OutFile C:\vs_community.exe
       - name: Install VC++ and CMake
@@ -34,6 +53,21 @@ jobs:
             --add Microsoft.VisualStudio.Component.VC.CMake.Project
             --add Microsoft.VisualStudio.Component.Windows11SDK.26100
             --add Microsoft.VisualStudio.Component.VC.Runtimes.x86.x64.Spectre
+      - name: Cache VC++ install
+        uses: actions/cache/save@v4
+        with:
+          key: win64-vcpp-tools
+          path: C:\Program Files\Microsoft Visual Studio\2022
+      - name: Cache Cargo files
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build release
         run: cargo run --release
       - name: Create GitHub release
