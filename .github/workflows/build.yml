@@ -34,30 +34,34 @@ jobs:
         with:
           key: win64-rust
           path: C:\Program Files\Rust**\*
-      - name: Restore cached VC++ install
-        uses: actions/cache/restore@v4
+      # - name: Restore cached VC++ install
+      #   uses: actions/cache/restore@v4
+      #   with:
+      #     key: win64-vcpp-tools
+      #     path: C:\Program Files\Microsoft Visual Studio\2022\**\*
+      # - name: Download Visual Studio Installer
+      #   run: Invoke-WebRequest https://aka.ms/vs/17/release/vs_community.exe -OutFile C:\vs_community.exe
+      # - name: Install VC++ and CMake
+      #   shell: cmd
+      #   run: >
+      #     C:\vs_community.exe
+      #       --passive
+      #       --add Microsoft.VisualStudio.Component.CoreEditor
+      #       --add Microsoft.VisualStudio.Workload.CoreEditor
+      #       --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64
+      #       --add Microsoft.VisualStudio.ComponentGroup.WebToolsExtensions.CMake
+      #       --add Microsoft.VisualStudio.Component.VC.CMake.Project
+      #       --add Microsoft.VisualStudio.Component.VC.Runtimes.x86.x64.Spectre
+      #       --add Microsoft.VisualStudio.Component.Windows11SDK.26100
+      # - name: Cache VC++ install
+      #   uses: actions/cache/save@v4
+      #   with:
+      #     key: win64-vcpp-tools
+      #     path: C:\Program Files\Microsoft Visual Studio\2022\**\*
+      - uses: TheMrMilchmann/setup-msvc-dev@v3
         with:
-          key: win64-vcpp-tools
-          path: C:\Program Files\Microsoft Visual Studio\2022\**\*
-      - name: Download Visual Studio Installer
-        run: Invoke-WebRequest https://aka.ms/vs/17/release/vs_community.exe -OutFile C:\vs_community.exe
-      - name: Install VC++ and CMake
-        shell: cmd
-        run: >
-          C:\vs_community.exe
-            --passive
-            --add Microsoft.VisualStudio.Component.CoreEditor
-            --add Microsoft.VisualStudio.Workload.CoreEditor
-      #            --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64
-      #            --add Microsoft.VisualStudio.ComponentGroup.WebToolsExtensions.CMake
-      #            --add Microsoft.VisualStudio.Component.VC.CMake.Project
-      #            --add Microsoft.VisualStudio.Component.VC.Runtimes.x86.x64.Spectre
-      #            --add Microsoft.VisualStudio.Component.Windows11SDK.26100
-      - name: Cache VC++ install
-        uses: actions/cache/save@v4
-        with:
-          key: win64-vcpp-tools
-          path: C:\Program Files\Microsoft Visual Studio\2022\**\*
+          arch: x64
+          spectre: true
       - name: Cache Cargo files
         uses: actions/cache@v4
         with:
