@@ -49,5 +49,5 @@ jobs:
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          name: "${{ steps.date.outputs.dateStamp }}"
+          tag_name: "${{ steps.date.outputs.dateStamp }}"
           files: ./zed/target/release/zed.exe
