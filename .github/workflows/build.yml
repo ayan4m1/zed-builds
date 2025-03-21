@@ -28,12 +28,12 @@ jobs:
       - name: Install Rust
         # if: steps.restore-rust.outputs.cache-hit != 'true'
         run: Start-Process msiexec.exe -Wait -ArgumentList '/i C:\rustup.msi /qb!'
-      - name: Cache Rust install
-        # if: steps.restore-rust.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          key: win64-rust
-          path: C:\Program Files\Rust**\*
+      # - name: Cache Rust install
+      #   # if: steps.restore-rust.outputs.cache-hit != 'true'
+      #   uses: actions/cache/save@v4
+      #   with:
+      #     key: win64-rust
+      #     path: C:\Program Files\Rust**\*
       # - name: Restore cached VC++ install
       #   uses: actions/cache/restore@v4
       #   with:
