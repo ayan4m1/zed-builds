@@ -45,7 +45,7 @@ jobs:
         shell: cmd
         run: >
           C:\vs_community.exe
-            --quiet
+            --passive
             --add Microsoft.VisualStudio.Component.CoreEditor
             --add Microsoft.VisualStudio.Workload.CoreEditor
             --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64
