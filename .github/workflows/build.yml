@@ -45,7 +45,7 @@ jobs:
         shell: cmd
         run: |
           cd zed
-          cargo run --release
+          cargo build --release
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
